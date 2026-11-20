@@ -68,10 +68,10 @@ In a second terminal:
 
 ```bash
 flutter pub get
-flutter run -d chrome
+flutter run   # pick the iOS simulator or Android emulator
 ```
 
-Emulator UI: http://localhost:4000 (Auth 9099, Firestore 8081, Storage 9199). On an Android emulator the app uses `10.0.2.2` to reach them.
+Emulator UI: http://localhost:4000 (Auth 9099, Firestore 8081, Storage 9199). On an Android emulator the app uses `10.0.2.2` to reach them. Debug builds allow plain HTTP so Android can talk to the emulators; release builds do not.
 
 ### Make an admin
 

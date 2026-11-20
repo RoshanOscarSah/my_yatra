@@ -212,7 +212,7 @@ class _EntryFormState extends State<EntryForm> {
         Wrap(spacing: 8, runSpacing: 8, children: [
           for (var i = 0; i < _urls.length; i++)
             _Thumb(
-              image: Image.network(_urls[i], fit: BoxFit.cover),
+              image: Image.network(Env.photoUrl(_urls[i]), fit: BoxFit.cover),
               onRemove: () => setState(() {
                 _urls.removeAt(i);
                 _removed.add(_paths.removeAt(i));

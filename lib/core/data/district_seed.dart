@@ -155,7 +155,7 @@ const List<SeedDistrict> districtSeed = [
       'Bus or jeep from Dharan or Hile (about 4 h).',
       'Few hotels outside Myanglung.',
       [SeedFestival('Chasok Tangnam', 'Nov/Dec')],
-      ['Dhaka cloth', 'Kinema', 'Tongba'], true, [
+      ['Kinema', 'Tongba', 'Millet bread'], true, [
     SeedPlace('Tinjure-Milke rhododendron area', _n, 'One of the largest rhododendron forests in the world.'),
     SeedPlace('Myanglung bazaar', _c, 'Traditional Limbu trading town famous for dhaka weaving.'),
   ]),
@@ -165,7 +165,7 @@ const List<SeedDistrict> districtSeed = [
       'Flight to Bhojpur or jeep from Dharan/Hile (about 8 h).',
       'Remote roads can close in the monsoon.',
       [SeedFestival('Sakela', 'May/Nov')],
-      ['Khukuri craft', 'Millet bread', 'Gundruk'], true, [
+      ['Millet bread', 'Gundruk', 'Tongba'], true, [
     SeedPlace('Bhojpur khukuri workshops', _h, 'Traditional blacksmiths making the famous knives.'),
     SeedPlace('Tyamke Danda', _n, 'Hill viewpoint with Himalayan panoramas.'),
   ]),
@@ -556,7 +556,7 @@ const List<SeedDistrict> districtSeed = [
       'Bus to Gorkha bazaar (about 5 h); cable car to Manakamana from Kurintar.',
       'Manaslu needs a restricted-area permit and guide.',
       [SeedFestival('Dashain at Gorkha Durbar', 'Oct')],
-      ['Local millet', 'Fish at Kurintar'], false, [
+      ['Local millet', 'Fresh river fish'], false, [
     SeedPlace('Gorkha Durbar', _h, 'Palace of King Prithvi Narayan Shah.'),
     SeedPlace('Manakamana Temple', _s, 'Wish-fulfilling goddess temple reached by cable car.'),
     SeedPlace('Manaslu Circuit', _a, 'Remote trek around the eighth-highest mountain.'),
@@ -630,7 +630,7 @@ const List<SeedDistrict> districtSeed = [
       'Bus from Butwal (about 2 h) or Pokhara on the Siddhartha Highway.',
       'Foggy mornings in winter.',
       [SeedFestival('Bhagwati Jatra', 'Sep')],
-      ['Palpali dhaka', 'Newari khaja'], false, [
+      ['Newari khaja', 'Sel roti'], false, [
     SeedPlace('Rani Mahal', _h, 'Riverside palace called the "Taj Mahal of Nepal".'),
     SeedPlace('Srinagar Danda', _n, 'Pine hill above Tansen with mountain views.'),
   ]),
@@ -733,7 +733,7 @@ const List<SeedDistrict> districtSeed = [
       'Very remote; carry supplies and travel with a guide.',
       [SeedFestival('Shey festival (every 12 years)', 'Aug')],
       ['Tsampa', 'Yak meat', 'Butter tea'], true, [
-    SeedPlace('Shey Phoksundo Lake', _n, 'Deep turquoise alpine lake.'),
+    SeedPlace('Phoksundo Lake', _n, 'Deep turquoise alpine lake.'),
     SeedPlace('Shey Phoksundo National Park', _a, 'Snow leopard and blue sheep habitat.'),
   ]),
   SeedDistrict('humla', 'Humla', 'Humla', 6, 29.97, 81.83,
@@ -807,6 +807,7 @@ const List<SeedDistrict> districtSeed = [
       ['Local ghee', 'Millet'], true, [
     SeedPlace('Amargadhi Fort', _h, 'Historic hill fort.'),
     SeedPlace('Ugratara Temple', _s, 'Important Shakti shrine.'),
+    SeedPlace('Ajaymerukot', _h, 'Palace and fort ruins of the old Doti kingdom, a short climb from Dadeldhura.'),
   ]),
   SeedDistrict('doti', 'Doti', 'doti', 7, 29.27, 80.95,
       'Historic seat of the Doti kingdom with Shaileshwari temple and the Seti river.',
@@ -816,7 +817,7 @@ const List<SeedDistrict> districtSeed = [
       [SeedFestival('Gaura Parba', 'Aug/Sep')],
       ['Millet', 'Local fish'], true, [
     SeedPlace('Shaileshwari Temple', _s, 'Major temple in Silgadhi.'),
-    SeedPlace('Ajaymeru Kot', _h, 'Ruins of the Doti capital.'),
+    SeedPlace('Dipayal-Silgadhi old bazaar', _c, 'Historic twin town on the Seti river, once part of the Doti kingdom.'),
   ]),
   SeedDistrict('darchula', 'Darchula', 'darchula', 7, 29.85, 80.55,
       'Far-western mountain district on the Mahakali river with the Api Himal.',

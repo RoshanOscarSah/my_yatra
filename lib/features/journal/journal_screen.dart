@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../../app/env.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -94,7 +96,7 @@ class _EntriesTab extends StatelessWidget {
                     ? Container(
                         color: AppColors.primarySoft,
                         child: const Icon(Icons.landscape_outlined, color: AppColors.primary))
-                    : Image.network(e.photoUrls.first, fit: BoxFit.cover),
+                    : Image.network(Env.photoUrl(e.photoUrls.first), fit: BoxFit.cover),
               ),
               Expanded(
                 child: Padding(

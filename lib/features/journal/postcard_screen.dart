@@ -1,6 +1,8 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+
+import '../../app/env.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -69,7 +71,7 @@ class _PostcardScreenState extends State<PostcardScreen> {
               clipBehavior: Clip.antiAlias,
               child: Stack(fit: StackFit.expand, children: [
                 if (photos.isNotEmpty)
-                  Image.network(photos[_photo], fit: BoxFit.cover)
+                  Image.network(Env.photoUrl(photos[_photo]), fit: BoxFit.cover)
                 else
                   const Icon(Icons.landscape, color: Colors.white24, size: 120),
                 const DecoratedBox(
@@ -120,7 +122,7 @@ class _PostcardScreenState extends State<PostcardScreen> {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(6),
-                        child: Image.network(photos[i], width: 60, height: 60, fit: BoxFit.cover),
+                        child: Image.network(Env.photoUrl(photos[i]), width: 60, height: 60, fit: BoxFit.cover),
                       ),
                     ),
                   ),

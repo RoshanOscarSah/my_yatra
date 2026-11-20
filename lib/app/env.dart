@@ -25,6 +25,17 @@ class Env {
     return 'localhost';
   }
 
+  /// Photo links from the Storage emulator name the host of the device that
+  /// uploaded them (for example localhost:9199 from the iOS simulator), which
+  /// another device cannot open. Point them at this device's emulator host.
+  /// Real Firebase links are returned unchanged.
+  static String photoUrl(String url) {
+    if (!useEmulator) return url;
+    final uri = Uri.tryParse(url);
+    if (uri == null || uri.port != 9199 || uri.host == emulatorHost) return url;
+    return uri.replace(host: emulatorHost).toString();
+  }
+
   /// NFR (US-1.4): sign out after this long without any interaction.
   static const idleTimeout = Duration(minutes: 15);
 

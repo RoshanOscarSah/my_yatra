@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../../app/env.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -92,13 +94,13 @@ class PhotoGrid extends StatelessWidget {
                 builder: (_) => Scaffold(
                   backgroundColor: Colors.black,
                   appBar: AppBar(backgroundColor: Colors.black, foregroundColor: Colors.white),
-                  body: Center(child: InteractiveViewer(child: Image.network(u))),
+                  body: Center(child: InteractiveViewer(child: Image.network(Env.photoUrl(u)))),
                 ),
               ),
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.network(u, fit: BoxFit.cover),
+              child: Image.network(Env.photoUrl(u), fit: BoxFit.cover),
             ),
           ),
       ],
