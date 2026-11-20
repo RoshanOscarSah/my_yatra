@@ -100,4 +100,19 @@ void main() {
     expect(r.type, 'Mixed Traveller');
     expect(r.scores.values.every((v) => v == 0), isTrue);
   });
+
+  test('gap summary names the most-visited types, not the top DNA types', () {
+    // The QA account from manual testing: culture and history interests,
+    // but trips were mostly culture and nature.
+    final r = DnaCalculator.calculate(const DnaInput(
+      interests: {c, h},
+      visitedDistrictTypes: [
+        [n, f, c],
+        [n, c, f],
+        [c, h, n],
+      ],
+      activities: [n, h],
+    ));
+    expect(r.gapSummary, startsWith('You have mostly explored culture and nature places.'));
+  });
 }

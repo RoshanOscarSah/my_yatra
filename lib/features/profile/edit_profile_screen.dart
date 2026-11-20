@@ -64,7 +64,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         content: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
           const Text(
             'This permanently deletes your profile, visits, journal entries, photos, itineraries, '
-            'reviews and Journey DNA. It cannot be undone.',
+            'reviews and Journey DNA. Reports you sent stay with the team without your name. It cannot be undone.',
           ),
           if (usesPassword) ...[
             const SizedBox(height: 12),

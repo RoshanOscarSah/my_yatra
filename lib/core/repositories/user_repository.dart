@@ -170,6 +170,13 @@ class UserRepository {
     for (final d in reviews.docs) {
       await d.reference.delete();
     }
+    // Reports and app feedback stay for the team, but no longer point to
+    // this user.
+    final feedback =
+        await _db.collection('feedback').where('uid', isEqualTo: uid).get();
+    for (final d in feedback.docs) {
+      await d.reference.update({'uid': ''});
+    }
     await _user.delete();
   }
 }

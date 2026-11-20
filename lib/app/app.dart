@@ -107,13 +107,29 @@ class IdleTimeout extends StatefulWidget {
 
 class _IdleTimeoutState extends State<IdleTimeout> {
   Timer? _timer;
+  String? _typedText;
+
+  /// Text of the field being edited, if any. Typing on the on-screen
+  /// keyboard sends no pointer events, so this is how typing counts as
+  /// activity.
+  static String? _focusedText() {
+    final ctx = FocusManager.instance.primaryFocus?.context;
+    return ctx?.findAncestorWidgetOfExactType<EditableText>()?.controller.text;
+  }
 
   void _reset() {
     _timer?.cancel();
+    _typedText = _focusedText();
     final auth = context.read<AuthProvider>();
     if (!auth.signedIn) return;
     _timer = Timer(Env.idleTimeout, () async {
       if (!auth.signedIn) return;
+      // Still typing (the text changed since the timer started): not idle.
+      final text = _focusedText();
+      if (text != null && text != _typedText) {
+        if (mounted) _reset();
+        return;
+      }
       await signOutEverywhere(auth);
       messengerKey.currentState?.showSnackBar(SnackBar(
           content: Text('Signed out after ${Env.idleTimeout.inMinutes} '

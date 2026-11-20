@@ -31,7 +31,10 @@ service cloud.firestore {
         && request.resource.data.role == resource.data.role;
       allow read, delete: if signedIn() && request.auth.uid == uid;
 
-      match /{document=**} {
+      // Sub-collections only (visits, journal, ...). A bare {document=**}
+      // would also match users/{uid} itself in rules v2 and let a user
+      // bypass the role check above and make themselves admin.
+      match /{collection}/{document=**} {
         allow read, write: if signedIn() && request.auth.uid == uid;
       }
     }
@@ -56,13 +59,18 @@ service cloud.firestore {
     match /reviews/{reviewId} {
       allow read: if signedIn();
       // Only travellers who marked the district visited may review it, as themselves.
-      allow create: if signedIn()
-        && request.resource.data.uid == request.auth.uid
-        && request.resource.data.rating is int
-        && request.resource.data.rating >= 1 && request.resource.data.rating <= 5
-        && hasVisited(request.resource.data.districtId);
+      // Edits are checked the same way, so a rating cannot be changed to 999
+      // or moved to a district the user has not visited.
+      function validReview() {
+        return request.resource.data.uid == request.auth.uid
+          && request.resource.data.rating is int
+          && request.resource.data.rating >= 1 && request.resource.data.rating <= 5
+          && hasVisited(request.resource.data.districtId);
+      }
+      allow create: if signedIn() && validReview();
       allow update: if signedIn() && resource.data.uid == request.auth.uid
-        && request.resource.data.uid == request.auth.uid;
+        && validReview()
+        && request.resource.data.districtId == resource.data.districtId;
       allow delete: if signedIn() && (resource.data.uid == request.auth.uid || isAdmin());
     }
 
@@ -79,7 +87,13 @@ service cloud.firestore {
         && request.resource.data.status == 'new';
       // The sender can follow the status of their own reports.
       allow read: if signedIn() && (resource.data.uid == request.auth.uid || isAdmin());
-      allow update: if isAdmin();
+      // Admins change the status. When a user deletes their account, the
+      // sender may only blank out the uid on their own reports, so the report
+      // stays for the team but is no longer linked to them.
+      allow update: if isAdmin()
+        || (signedIn() && resource.data.uid == request.auth.uid
+            && request.resource.data.uid == ''
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['uid']));
       allow delete: if isAdmin();
     }
 

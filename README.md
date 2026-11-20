@@ -13,7 +13,7 @@ Built to the requirements in [`docs/`](docs/): the sprint guide, the project wor
 
 | Sprint | What is in the app |
 |---|---|
-| 1 Accounts & privacy | Email/password and Google sign-in, password rules, generic login errors, password reset, privacy policy acceptance, 15-minute idle sign-out, "Your data is private" and data-used-by-AI screen, edit profile, delete account with all data |
+| 1 Accounts & privacy | Email/password sign-in (Google sign-in is built but turned off), password rules, generic login errors, password reset, privacy policy acceptance, 15-minute idle sign-out, "Your data is private" and data-used-by-AI screen, edit profile, delete account with all data |
 | 2 Onboarding | Interests, travel habits, planning preferences, past districts (all skippable); edit later in Preferences |
 | 3 Map & districts | Interactive SVG map of 77 districts (visited / recommended / other), explore list with province and type filters, district page (types, seasons, cost, transport, festivals, food, places) |
 | 4 Visits | Mark visited with date or "before MyYatra", record places and activities, unmark, bulk add |
@@ -21,7 +21,7 @@ Built to the requirements in [`docs/`](docs/): the sprint guide, the project wor
 | 6 Recommendations | Ranked, explained suggestions (DNA + gaps + fit + less-explored), budget/distance/season filters, weekly picks, helpful / not interested / report with undo |
 | 7 Journal | Entries with dates, activities, story and up to 6 photos (offline queue), digital postcard |
 | 8 History & stats | Timeline with district/year filters, journey detail, statistics per year and province |
-| 9 Itineraries | Day-by-day plans with budget vs estimated cost, share, save offline |
+| 9 Itineraries | Day-by-day plans with budget vs estimated cost, reorder, save offline |
 | 10–12 Gamification, offline, safety | Badges and gap challenges (can be switched off), offline downloads with sizes, emergency numbers, "I'm safe" SMS check-in, safety alerts with expiry |
 | 13–14 Community & feedback | One review per visited district, app feedback, wrong-info and recommendation reports with status |
 | 15 Admin | Seed data, edit districts and places, alerts, feedback inbox, review moderation, content analytics (aggregates only), change log with date filter |
@@ -88,7 +88,7 @@ dart pub global activate flutterfire_cli
 flutterfire configure
 ```
 
-This overwrites `lib/firebase_options.dart`. Then enable Email/Password and Google in
+This overwrites `lib/firebase_options.dart`. Then enable Email/Password in
 Authentication, create Firestore and Storage, and deploy the rules:
 
 ```bash

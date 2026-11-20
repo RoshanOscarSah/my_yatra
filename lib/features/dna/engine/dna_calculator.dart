@@ -226,9 +226,15 @@ class DnaCalculator {
     if (r.visitCount == 0) {
       return 'Add the districts you have visited to see your exploration gaps.';
     }
+    // Most-visited first, so the sentence matches the "explored" chart
+    // (ties keep the DNA order).
     final explored = r.ranked
         .where((c) => (r.visitShare[c] ?? 0) >= gapThreshold)
-        .toList();
+        .toList()
+      ..sort((a, b) {
+        final byShare = (r.visitShare[b] ?? 0).compareTo(r.visitShare[a] ?? 0);
+        return byShare != 0 ? byShare : r.ranked.indexOf(a).compareTo(r.ranked.indexOf(b));
+      });
     final rare = r.ranked.where(r.gaps.contains).toList().reversed.toList();
     final parts = <String>[];
     if (explored.isNotEmpty) {
