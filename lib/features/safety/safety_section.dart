@@ -92,6 +92,48 @@ class SafetySection extends StatelessWidget {
   }
 }
 
+/// A short warning near the top of the district page, so an active alert is
+/// seen without scrolling down to the Safety section (US-12.1).
+class ActiveAlertBanner extends StatelessWidget {
+  final String districtId;
+  const ActiveAlertBanner({super.key, required this.districtId});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<List<SafetyAlert>>(
+      stream: CommunityRepository().activeAlerts(districtId),
+      builder: (_, snap) {
+        final alerts = snap.data ?? const [];
+        if (alerts.isEmpty) return const SizedBox.shrink();
+        final more = alerts.length - 1;
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: InfoCard(
+            color: const Color(0xFFFDECEA),
+            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const Icon(Icons.warning_amber_rounded, color: AppColors.danger),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text(alerts.first.message,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontWeight: FontWeight.w600)),
+                  const SizedBox(height: 4),
+                  Text(
+                    '${more > 0 ? '+$more more · ' : ''}See Safety below for details',
+                    style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                  ),
+                ]),
+              ),
+            ]),
+          ),
+        );
+      },
+    );
+  }
+}
+
 /// Opens the user's own messaging app with a prefilled message (US-12.2).
 /// No location is read or tracked.
 Future<void> checkIn(BuildContext context, String districtName) async {

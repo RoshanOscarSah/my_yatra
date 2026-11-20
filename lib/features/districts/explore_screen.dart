@@ -124,7 +124,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
               ),
             ),
             const SizedBox(height: 12),
-            Text('${list.length} districts',
+            Text('${list.length} ${list.length == 1 ? 'district' : 'districts'}',
                 style: const TextStyle(color: AppColors.textSecondary)),
             const SizedBox(height: 6),
           ]),
@@ -170,6 +170,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
               Wrap(spacing: 8, runSpacing: 8, children: [
                 for (final e in Experience.values)
                   FilterChip(
+                    showCheckmark: false,
                     avatar: Icon(e.icon, size: 16),
                     label: Text(e.label),
                     selected: _type == e,
@@ -180,6 +181,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
               const Text('Status', style: TextStyle(fontWeight: FontWeight.w600)),
               const SizedBox(height: 6),
               SegmentedButton<String>(
+                showSelectedIcon: false,
                 segments: const [
                   ButtonSegment(value: 'all', label: Text('All')),
                   ButtonSegment(value: 'visited', label: Text('Visited')),

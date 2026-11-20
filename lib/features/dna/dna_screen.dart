@@ -68,7 +68,12 @@ class _DnaTab extends StatelessWidget {
       Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 420),
-          child: AspectRatio(aspectRatio: 1.1, child: DnaRadarChart(scores: dna.scores)),
+          // fl_chart draws the axis titles outside the polygon, so leave
+          // room for them or they spill over the heading and the bars.
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(28, 40, 28, 44),
+            child: AspectRatio(aspectRatio: 1.1, child: DnaRadarChart(scores: dna.scores)),
+          ),
         ),
       ),
       const SizedBox(height: 8),

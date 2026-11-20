@@ -59,9 +59,9 @@ class ProfileScreen extends StatelessWidget {
             if (p.isAdmin) const Padding(padding: EdgeInsets.only(top: 6), child: TagChip('Admin')),
             const SizedBox(height: 16),
             Row(children: [
-              StatTile('${stats.stats.visitedCount}', 'districts'),
+              StatTile('${stats.stats.visitedCount}', stats.stats.visitedCount == 1 ? 'district' : 'districts'),
               StatTile('${stats.stats.percent.toStringAsFixed(0)}%', 'of Nepal'),
-              if (p.gamificationOn) StatTile('${stats.unlockedBadges.length}', 'badges'),
+              if (p.gamificationOn) StatTile('${stats.unlockedBadges.length}', stats.unlockedBadges.length == 1 ? 'badge' : 'badges'),
             ]),
           ]),
         ),

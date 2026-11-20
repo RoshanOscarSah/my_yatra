@@ -40,7 +40,14 @@ class MyYatraApp extends StatelessWidget {
         return UserScope(
           key: ValueKey(uid),
           uid: uid,
-          child: IdleTimeout(child: child ?? const SizedBox()),
+          // Tapping outside a text field closes the keyboard. iOS has no
+          // "done" key on multi-line fields, so without this the keyboard
+          // can cover the Save button.
+          child: GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+            child: IdleTimeout(child: child ?? const SizedBox()),
+          ),
         );
       },
       home: const AuthGate(),

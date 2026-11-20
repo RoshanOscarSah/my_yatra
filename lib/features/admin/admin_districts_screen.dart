@@ -136,6 +136,7 @@ class _DistrictEditScreenState extends State<DistrictEditScreen> {
         Wrap(spacing: 8, runSpacing: 8, children: [
           for (final e in Experience.values)
             FilterChip(
+              showCheckmark: false,
               avatar: Icon(e.icon, size: 16),
               label: Text(e.label),
               selected: _types.contains(e),
@@ -153,6 +154,7 @@ class _DistrictEditScreenState extends State<DistrictEditScreen> {
         ]),
         const SectionTitle('Estimated cost'),
         SegmentedButton<int>(
+          showSelectedIcon: false,
           segments: [
             for (final c in CostLevel.labels.entries) ButtonSegment(value: c.key, label: Text(c.value)),
           ],
@@ -233,13 +235,22 @@ class _PlacesEditor extends StatelessWidget {
     final name = TextEditingController(text: p?.name);
     final desc = TextEditingController(text: p?.description);
     var type = p?.experienceType ?? Experience.nature;
+    String? nameError;
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setS) => AlertDialog(
           title: Text(p == null ? 'Add place' : 'Edit place'),
           content: Column(mainAxisSize: MainAxisSize.min, children: [
-            TextField(controller: name, decoration: const InputDecoration(labelText: 'Name')),
+            TextField(
+              controller: name,
+              autofocus: p == null,
+              textCapitalization: TextCapitalization.words,
+              decoration: InputDecoration(labelText: 'Name', errorText: nameError),
+              onChanged: (_) {
+                if (nameError != null) setS(() => nameError = null);
+              },
+            ),
             const SizedBox(height: 8),
             DropdownButtonFormField<Experience>(
               initialValue: type,
@@ -252,7 +263,17 @@ class _PlacesEditor extends StatelessWidget {
           ]),
           actions: [
             TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
-            TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Save')),
+            TextButton(
+              onPressed: () {
+                // Keep the dialog open so nothing typed is lost.
+                if (name.text.trim().isEmpty) {
+                  setS(() => nameError = 'Enter the place name.');
+                  return;
+                }
+                Navigator.pop(ctx, true);
+              },
+              child: const Text('Save'),
+            ),
           ],
         ),
       ),
@@ -272,5 +293,8 @@ class _PlacesEditor extends StatelessWidget {
       adminUid: a.uid,
       adminName: a.name,
     );
+    if (context.mounted) {
+      showSnack(context, '${name.text.trim()} ${p == null ? 'added' : 'saved'}. Users see it right away.');
+    }
   }
 }

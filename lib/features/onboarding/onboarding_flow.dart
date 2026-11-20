@@ -50,13 +50,17 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
       await profile.saveInterests(_interests);
     } else if (_step == 1) {
       if (!_habits.isComplete) {
+        // The missing answer may be below the fold, so say so as well.
         setState(() => _showErrors = true);
+        showSnack(context, 'Please answer every question. Scroll down to see what is missing.');
         return;
       }
       await profile.saveHabits(_habits);
     } else if (_step == 2) {
       if (!_planning.isComplete) {
+        // The missing answer may be below the fold, so say so as well.
         setState(() => _showErrors = true);
+        showSnack(context, 'Please answer every question. Scroll down to see what is missing.');
         return;
       }
       await profile.savePlanning(_planning);

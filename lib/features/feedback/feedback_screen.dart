@@ -87,6 +87,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         ]),
         const SizedBox(height: 8),
         SegmentedButton<String>(
+          showSelectedIcon: false,
           segments: const [
             ButtonSegment(value: 'bug', label: Text('Bug')),
             ButtonSegment(value: 'suggestion', label: Text('Suggestion')),
@@ -122,7 +123,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                   title: Text(switch (f.type) {
                     'recommendation' => 'Recommendation report · ${dp.byId(f.districtId)?.name ?? ''}',
                     'district_info' => 'Wrong info · ${dp.byId(f.districtId)?.name ?? ''} (${f.category})',
-                    _ => 'App feedback · ${f.category}',
+                    _ => 'App feedback · ${f.category.isEmpty ? 'general' : f.category[0].toUpperCase() + f.category.substring(1)}',
                   }),
                   subtitle: Text('${f.text.isEmpty ? '—' : f.text}\n'
                       '${f.createdAt == null ? '' : DateFormat.yMMMd().format(f.createdAt!)}'),

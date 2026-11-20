@@ -120,7 +120,7 @@ class _FilterBar extends StatelessWidget {
               (v) => recs.setFilters(f.copyWith(budget: v, clearBudget: v == null))),
         ),
         _chip(
-          'Distance: ${f.distance == null ? 'Any' : f.distance!}',
+          'Distance: ${f.distance == null ? 'Any' : '${f.distance![0].toUpperCase()}${f.distance!.substring(1)}'}',
           f.distance != null,
           hasStart
               ? () => pick<String>('Distance from your start', {null: 'Any', ...PlanningForm.distances},
@@ -152,6 +152,7 @@ class _FilterBar extends StatelessWidget {
           label: Text(label),
           selected: active,
           onSelected: onTap == null ? null : (_) => onTap(),
+          showCheckmark: false,
           avatar: const Icon(Icons.expand_more, size: 16),
         ),
       );

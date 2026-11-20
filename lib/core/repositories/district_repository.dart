@@ -96,6 +96,17 @@ class DistrictRepository {
     await flush();
   }
 
+  /// Lists such as seasons and experience types are sets in practice, so a
+  /// different order alone is not logged as a change.
+  static bool _sameValue(Object? a, Object? b) {
+    if (a is List && b is List) {
+      final x = a.map((e) => e.toString()).toList()..sort();
+      final y = b.map((e) => e.toString()).toList()..sort();
+      return x.join('\u0000') == y.join('\u0000');
+    }
+    return a.toString() == b.toString();
+  }
+
   /// Admin: save a district and log every changed field (US-15.1, US-15.4).
   Future<void> saveDistrict(District updated, District? old,
       {required String adminUid, required String adminName}) async {
@@ -106,7 +117,7 @@ class DistrictRepository {
         {...newMap, 'updatedAt': FieldValue.serverTimestamp()});
     newMap.forEach((k, v) {
       final before = oldMap?[k];
-      if (before.toString() != v.toString()) {
+      if (!_sameValue(before, v)) {
         batch.set(_db.collection('changeLog').doc(), {
           'entity': 'district',
           'entityId': updated.id,

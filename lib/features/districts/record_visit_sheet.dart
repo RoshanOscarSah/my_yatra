@@ -172,6 +172,7 @@ class _RecordPlacesSheetState extends State<RecordPlacesSheet> {
                           for (final e in Experience.values)
                             FilterChip(
                               visualDensity: VisualDensity.compact,
+                              showCheckmark: false,
                               avatar: Icon(e.icon, size: 14),
                               label: Text(e.label),
                               selected: _places[i].activities.contains(e),

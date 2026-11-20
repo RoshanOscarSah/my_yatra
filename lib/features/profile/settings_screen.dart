@@ -74,29 +74,42 @@ class SettingsScreen extends StatelessWidget {
     final c = pp.profile!.emergencyContact;
     final name = TextEditingController(text: c?.name);
     final phone = TextEditingController(text: c?.phone);
+    // Validate inside the dialog so a typo does not throw away what was typed.
+    String? nameError, phoneError;
     final ok = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Emergency contact'),
-        content: Column(mainAxisSize: MainAxisSize.min, children: [
-          TextField(controller: name, decoration: const InputDecoration(labelText: 'Name')),
-          const SizedBox(height: 8),
-          TextField(
-              controller: phone,
-              keyboardType: TextInputType.phone,
-              decoration: const InputDecoration(labelText: 'Phone number')),
-        ]),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
-          TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Save')),
-        ],
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, set) => AlertDialog(
+          title: const Text('Emergency contact'),
+          content: Column(mainAxisSize: MainAxisSize.min, children: [
+            TextField(
+                controller: name,
+                textCapitalization: TextCapitalization.words,
+                decoration: InputDecoration(labelText: 'Name', errorText: nameError)),
+            const SizedBox(height: 8),
+            TextField(
+                controller: phone,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(labelText: 'Phone number', errorText: phoneError)),
+          ]),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
+            TextButton(
+              onPressed: () {
+                final validPhone = RegExp(r'^\+?[0-9][0-9 -]{6,18}$').hasMatch(phone.text.trim());
+                set(() {
+                  nameError = name.text.trim().isEmpty ? 'Enter a name.' : null;
+                  phoneError = validPhone ? null : 'Enter a valid phone number.';
+                });
+                if (nameError == null && phoneError == null) Navigator.pop(ctx, true);
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        ),
       ),
     );
     if (ok != true) return;
-    if (phone.text.trim().length < 7) {
-      if (context.mounted) showSnack(context, 'Enter a valid phone number.');
-      return;
-    }
     await pp.update({
       'emergencyContact': {'name': name.text.trim(), 'phone': phone.text.trim()}
     });

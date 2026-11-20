@@ -21,6 +21,8 @@ class _AdminFeedbackScreenState extends State<AdminFeedbackScreen> {
   static const types = {'app': 'App feedback', 'recommendation': 'Recommendation reports', 'district_info': 'Wrong info'};
   static const statuses = ['new', 'reviewed', 'resolved'];
 
+  static String _cap(String s) => s.isEmpty ? s : '${s[0].toUpperCase()}${s.substring(1)}';
+
   @override
   Widget build(BuildContext context) {
     final dp = context.watch<DistrictProvider>();
@@ -40,12 +42,14 @@ class _AdminFeedbackScreenState extends State<AdminFeedbackScreen> {
               for (final t in types.entries)
                 FilterChip(
                   label: Text(t.value),
+                  showCheckmark: false,
                   selected: _type == t.key,
                   onSelected: (s) => setState(() => _type = s ? t.key : null),
                 ),
               for (final s in statuses)
                 FilterChip(
-                  label: Text('${s[0].toUpperCase()}${s.substring(1)} (${all.where((f) => f.status == s).length})'),
+                  label: Text('${_cap(s)} (${all.where((f) => f.status == s).length})'),
+                  showCheckmark: false,
                   selected: _status == s,
                   onSelected: (v) => setState(() => _status = v ? s : null),
                 ),
@@ -60,20 +64,21 @@ class _AdminFeedbackScreenState extends State<AdminFeedbackScreen> {
                     Row(children: [
                       Expanded(
                         child: Text(
-                          '${types[f.type] ?? f.type} · ${f.category}'
+                          '${types[f.type] ?? f.type}${f.category.isEmpty ? '' : ' · ${_cap(f.category)}'}'
                           '${f.districtId == null ? '' : ' · ${dp.byId(f.districtId)?.name ?? f.districtId}'}',
                           style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
                       ),
                       StatusChip(f.status),
                     ]),
-                    if (f.rating != null) Text('Rating: ${'★' * f.rating!}'),
+                    if (f.rating != null) Text('Rating: ${'★' * f.rating!}${'☆' * (5 - f.rating!)} (${f.rating}/5)'),
                     if (f.dnaType != null) Text('Journey DNA: ${f.dnaType}'),
                     if (f.text.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 4), child: Text(f.text)),
                     if (f.createdAt != null) Text(fmt.format(f.createdAt!), style: const TextStyle(fontSize: 12)),
                     const SizedBox(height: 8),
                     SegmentedButton<String>(
-                      segments: [for (final s in statuses) ButtonSegment(value: s, label: Text(s))],
+                      showSelectedIcon: false,
+                      segments: [for (final s in statuses) ButtonSegment(value: s, label: Text(_cap(s)))],
                       selected: {f.status},
                       onSelectionChanged: (s) => CommunityRepository().setFeedbackStatus(f.id, s.first),
                     ),

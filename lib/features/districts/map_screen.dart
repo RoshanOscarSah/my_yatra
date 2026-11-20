@@ -37,7 +37,7 @@ class _MapScreenState extends State<MapScreen> {
             padding: const EdgeInsets.only(right: 16),
             child: Center(
                 child: TagChip(
-                    '${visits.count}/77 · ${(visits.progress * 100).toStringAsFixed(1)}%')),
+                    '${visits.count}/77 · ${(visits.progress * 100).round()}%')),
           ),
         ],
       ),

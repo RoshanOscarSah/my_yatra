@@ -45,6 +45,7 @@ class _AdminAnalyticsScreenState extends State<AdminAnalyticsScreen> {
             const SectionTitle('By province'),
             Table(
               columnWidths: const {0: FlexColumnWidth(2)},
+              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
               children: [
                 const TableRow(children: [
                   Text('Province', style: TextStyle(fontWeight: FontWeight.w700)),

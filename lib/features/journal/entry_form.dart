@@ -156,7 +156,10 @@ class _EntryFormState extends State<EntryForm> {
             IconButton(tooltip: 'Delete', onPressed: _delete, icon: const Icon(Icons.delete_outline)),
         ],
       ),
-      body: ListView(padding: const EdgeInsets.all(20), children: [
+      body: ListView(
+          padding: const EdgeInsets.all(20),
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          children: [
         DistrictPickerField(
           value: _district,
           onChanged: (v) => setState(() => _district = v),
@@ -186,6 +189,7 @@ class _EntryFormState extends State<EntryForm> {
         Wrap(spacing: 8, runSpacing: 8, children: [
           for (final e in Experience.values)
             FilterChip(
+              showCheckmark: false,
               avatar: Icon(e.icon, size: 16),
               label: Text(e.label),
               selected: _activities.contains(e),

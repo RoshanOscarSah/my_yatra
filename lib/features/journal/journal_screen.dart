@@ -293,14 +293,14 @@ class StatsTab extends StatelessWidget {
       InfoCard(
         child: Row(children: [
           StatTile('${s.visitedCount}/77', 'districts'),
-          StatTile('${s.percent.toStringAsFixed(1)}%', 'of Nepal'),
+          StatTile('${s.percent.round()}%', 'of Nepal'),
           StatTile('${s.provincesCovered}/7', 'provinces'),
         ]),
       ),
       const SizedBox(height: 12),
       InfoCard(
         child: Row(children: [
-          StatTile('${s.journeys}', 'journeys'),
+          StatTile('${s.journeys}', s.journeys == 1 ? 'journey' : 'journeys'),
           StatTile(s.topCategory?.label ?? '—', 'most explored'),
         ]),
       ),

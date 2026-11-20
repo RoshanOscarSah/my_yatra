@@ -109,6 +109,8 @@ class ReviewsSection extends StatelessWidget {
               controller: text,
               maxLines: 4,
               maxLength: 500,
+              // Rebuild so Publish enables as soon as there is text.
+              onChanged: (_) => set(() {}),
               decoration: const InputDecoration(hintText: 'What should other travellers know?'),
             ),
             Text('Shown as "${p.displayName}"',

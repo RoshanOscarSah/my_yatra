@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 import '../models/models.dart';
 import 'firestore_utils.dart';
@@ -70,6 +71,8 @@ class CommunityRepository {
       .map((q) => q.docs.map((d) => SafetyAlert.fromMap(d.id, d.data())).toList()
         ..sort((a, b) => b.expiresAt.compareTo(a.expiresAt)));
 
+  static String _when(DateTime t) => DateFormat('d MMM y, h:mm a').format(t);
+
   Future<void> saveAlert(SafetyAlert a, SafetyAlert? old,
       {required String adminUid, required String adminName}) async {
     final ref = a.id.isEmpty
@@ -81,8 +84,8 @@ class CommunityRepository {
       'entity': 'alert',
       'entityId': '${a.districtId}/${ref.id}',
       'field': old == null ? 'created' : 'updated',
-      'oldValue': old == null ? '' : '${old.message} (until ${old.expiresAt})',
-      'newValue': '${a.message} (until ${a.expiresAt})',
+      'oldValue': old == null ? '' : '${old.message} (until ${_when(old.expiresAt)})',
+      'newValue': '${a.message} (until ${_when(a.expiresAt)})',
       'adminUid': adminUid,
       'adminName': adminName,
       'at': FieldValue.serverTimestamp(),

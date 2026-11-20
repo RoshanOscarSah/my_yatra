@@ -104,6 +104,7 @@ class DistrictPage extends StatelessWidget {
               const SizedBox(height: 14),
               Text(d.description, style: const TextStyle(fontSize: 15, height: 1.45)),
               const SizedBox(height: 16),
+              ActiveAlertBanner(districtId: d.id),
 
               // Visit status
               InfoCard(

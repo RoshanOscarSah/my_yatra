@@ -111,7 +111,10 @@ class _ReportSheetState extends State<_ReportSheet> {
               ChoiceChip(
                 label: Text(r.value),
                 selected: _reason == r.key,
-                onSelected: (_) => setState(() => _reason = r.key),
+                onSelected: (_) => setState(() {
+                  _reason = r.key;
+                  _error = null;
+                }),
               ),
           ]),
           const SizedBox(height: 12),

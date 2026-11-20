@@ -36,7 +36,7 @@ class ItineraryListScreen extends StatelessWidget {
                   child: ListTile(
                     title: Text(dp.byId(i.districtId)?.name ?? i.districtId,
                         style: const TextStyle(fontWeight: FontWeight.w600)),
-                    subtitle: Text('${fmt.format(i.startDate)} – ${fmt.format(i.endDate)} · ${i.dayCount} days'
+                    subtitle: Text('${fmt.format(i.startDate)} – ${fmt.format(i.endDate)} · ${i.dayCount} ${i.dayCount == 1 ? 'day' : 'days'}'
                         '${i.budget > 0 ? ' · NPR ${NumberFormat.decimalPattern().format(i.budget)}' : ''}'),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => Navigator.push(
