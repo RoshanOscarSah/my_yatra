@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "myyatra-web",
+      "runtimeExecutable": "/Users/roshanoscarsah/fvm/versions/3.41.4/bin/flutter",
+      "runtimeArgs": ["run", "-d", "web-server", "--web-port", "5173", "--web-hostname", "localhost"],
+      "port": 5173
+    }
+  ]
+}

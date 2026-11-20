@@ -1,0 +1,98 @@
+rules_version = '2';
+
+// MyYatra Firestore rules.
+// Private by default (NFR / US-1.5): a traveller can only read and write their
+// own documents under users/{uid}. Admins manage the shared district data but
+// can never read another user's personal data (US-15.3, NFR-14).
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn() &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    function hasVisited(districtId) {
+      return exists(/databases/$(database)/documents/users/$(request.auth.uid)/visits/$(districtId));
+    }
+
+    // ---------- Personal data ----------
+    match /users/{uid} {
+      // A new user document must start as a traveller.
+      allow create: if signedIn() && request.auth.uid == uid
+        && request.resource.data.role == 'traveller';
+      // Users may update their own profile but may never change their role.
+      allow update: if signedIn() && request.auth.uid == uid
+        && request.resource.data.role == resource.data.role;
+      allow read, delete: if signedIn() && request.auth.uid == uid;
+
+      match /{document=**} {
+        allow read, write: if signedIn() && request.auth.uid == uid;
+      }
+    }
+
+    // ---------- Shared district data ----------
+    match /districts/{districtId} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+
+      match /places/{placeId} {
+        allow read: if signedIn();
+        allow write: if isAdmin();
+      }
+    }
+
+    // Collection-group reads of places (admin analytics).
+    match /{path=**}/places/{placeId} {
+      allow read: if signedIn();
+    }
+
+    // ---------- Reviews (US-13.1, US-15.7) ----------
+    match /reviews/{reviewId} {
+      allow read: if signedIn();
+      // Only travellers who marked the district visited may review it, as themselves.
+      allow create: if signedIn()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.rating is int
+        && request.resource.data.rating >= 1 && request.resource.data.rating <= 5
+        && hasVisited(request.resource.data.districtId);
+      allow update: if signedIn() && resource.data.uid == request.auth.uid
+        && request.resource.data.uid == request.auth.uid;
+      allow delete: if signedIn() && (resource.data.uid == request.auth.uid || isAdmin());
+    }
+
+    // ---------- Safety alerts (US-12.1, US-15.6) ----------
+    match /alerts/{alertId} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    // ---------- Feedback & reports (US-14.x, US-15.5) ----------
+    match /feedback/{feedbackId} {
+      allow create: if signedIn()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.status == 'new';
+      // The sender can follow the status of their own reports.
+      allow read: if signedIn() && (resource.data.uid == request.auth.uid || isAdmin());
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ---------- Admin change log (US-15.4) ----------
+    match /changeLog/{entryId} {
+      allow read, write: if isAdmin();
+    }
+
+    // ---------- Aggregate visit totals only (US-15.3, NFR-14) ----------
+    match /stats/districtVisits {
+      allow read: if isAdmin();
+      // Any signed-in user may bump a counter, but cannot read who did it.
+      allow create, update: if signedIn();
+    }
+  }
+}
