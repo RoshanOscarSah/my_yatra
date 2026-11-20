@@ -91,10 +91,12 @@ class _AuthScreenState extends State<AuthScreen>
     _run(() => auth.register(_name.text, _regEmail.text, _regPassword.text));
   }
 
-  void _google() {
-    final auth = context.read<AuthProvider>();
-    _run(auth.signInWithGoogle);
-  }
+  // Google sign-in is turned off for now. To bring it back, uncomment this
+  // method and the "or" divider and button at the end of build().
+  // void _google() {
+  //   final auth = context.read<AuthProvider>();
+  //   _run(auth.signInWithGoogle);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -150,21 +152,21 @@ class _AuthScreenState extends State<AuthScreen>
                 builder: (_, _) =>
                     _tabs.index == 0 ? _signInForm() : _registerForm(),
               ),
-              const SizedBox(height: 20),
-              const Row(children: [
-                Expanded(child: Divider()),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12),
-                  child: Text('or', style: TextStyle(color: AppColors.textSecondary)),
-                ),
-                Expanded(child: Divider()),
-              ]),
-              const SizedBox(height: 16),
-              OutlinedButton.icon(
-                onPressed: _busy ? null : _google,
-                icon: const Icon(Icons.g_mobiledata_rounded, size: 28),
-                label: const Text('Continue with Google'),
-              ),
+              // const SizedBox(height: 20),
+              // const Row(children: [
+              //   Expanded(child: Divider()),
+              //   Padding(
+              //     padding: EdgeInsets.symmetric(horizontal: 12),
+              //     child: Text('or', style: TextStyle(color: AppColors.textSecondary)),
+              //   ),
+              //   Expanded(child: Divider()),
+              // ]),
+              // const SizedBox(height: 16),
+              // OutlinedButton.icon(
+              //   onPressed: _busy ? null : _google,
+              //   icon: const Icon(Icons.g_mobiledata_rounded, size: 28),
+              //   label: const Text('Continue with Google'),
+              // ),
             ],
           ),
         ),
