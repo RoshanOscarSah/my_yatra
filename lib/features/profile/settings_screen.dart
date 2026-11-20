@@ -17,7 +17,7 @@ class SettingsScreen extends StatelessWidget {
     final p = pp.profile!;
     final recs = context.watch<RecommendationProvider>();
     final dp = context.watch<DistrictProvider>();
-    final fb = recs.feedback.entries.where((e) => e.value != 'helpful').toList();
+    final fb = recs.feedback.entries.where((e) => e.value == 'not_interested').toList();
 
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
@@ -57,13 +57,13 @@ class SettingsScreen extends StatelessWidget {
         ),
         const SectionTitle('Hidden recommendations'),
         if (fb.isEmpty)
-          const Text('You have not hidden or reported any district.',
+          const Text('You have not hidden any district.',
               style: TextStyle(color: AppColors.textSecondary)),
         for (final e in fb)
           ListTile(
             contentPadding: EdgeInsets.zero,
             title: Text(dp.byId(e.key)?.name ?? e.key),
-            subtitle: Text(e.value == 'reported' ? 'Reported' : 'Not interested'),
+            subtitle: const Text('Not interested'),
             trailing: TextButton(onPressed: () => recs.undo(e.key), child: const Text('Undo')),
           ),
       ]),

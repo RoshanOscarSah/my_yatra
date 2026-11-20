@@ -92,6 +92,8 @@ class CostLevel {
     2: 'NPR 3,000–6,000 per day',
     3: 'NPR 6,000+ per day',
   };
+  /// Lowest usual spend per day (NPR) for each level.
+  static const minPerDay = {1: 1500, 2: 3000, 3: 6000};
   static String label(int level) => labels[level] ?? 'Unknown';
   static String range(int level) => ranges[level] ?? '';
 }

@@ -175,10 +175,26 @@ class _ItineraryFormState extends State<ItineraryForm> {
             padding: const EdgeInsets.only(top: 8),
             child: InfoCard(
               color: AppColors.goldSoft,
-              child: Text(
-                'Estimated cost in ${d.name}: ${CostLevel.label(d.costLevel)} · ${CostLevel.range(d.costLevel)}'
-                '${perDay == null ? '' : '\nYour budget: about NPR ${NumberFormat.decimalPattern().format(perDay.round())} per day'}',
-              ),
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(
+                  'Estimated cost in ${d.name}: ${CostLevel.label(d.costLevel)} · ${CostLevel.range(d.costLevel)}'
+                  '${perDay == null ? '' : '\nYour budget: about NPR ${NumberFormat.decimalPattern().format(perDay.round())} per day'}',
+                ),
+                if (perDay != null && perDay < (CostLevel.minPerDay[d.costLevel] ?? 0)) ...[
+                  const SizedBox(height: 6),
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    const Icon(Icons.warning_amber_rounded, size: 18, color: AppColors.warning),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        'This is below the usual NPR ${NumberFormat.decimalPattern().format(CostLevel.minPerDay[d.costLevel])} '
+                        'per day for ${d.name}. Consider a bigger budget or fewer days.',
+                        style: const TextStyle(color: AppColors.warning, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ]),
+                ],
+              ]),
             ),
           ),
         const SizedBox(height: 12),

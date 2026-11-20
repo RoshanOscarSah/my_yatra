@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../app/theme.dart';
 import '../../core/models/models.dart';
 import '../../core/providers/district_provider.dart';
 import '../../core/repositories/community_repository.dart';
 import '../feedback/feedback_screen.dart';
+import 'admin_home.dart';
 
 /// US-15.5: one inbox for app feedback, recommendation reports and wrong info.
 class AdminFeedbackScreen extends StatefulWidget {
@@ -75,12 +77,22 @@ class _AdminFeedbackScreenState extends State<AdminFeedbackScreen> {
                     if (f.dnaType != null) Text('Journey DNA: ${f.dnaType}'),
                     if (f.text.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 4), child: Text(f.text)),
                     if (f.createdAt != null) Text(fmt.format(f.createdAt!), style: const TextStyle(fontSize: 12)),
+                    for (final h in f.history)
+                      Text(
+                        '${_cap(h.from)} → ${_cap(h.to)} by ${h.adminName}'
+                        '${h.at == null ? '' : ' · ${DateFormat('d MMM y, HH:mm').format(h.at!)}'}',
+                        style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                      ),
                     const SizedBox(height: 8),
                     SegmentedButton<String>(
                       showSelectedIcon: false,
                       segments: [for (final s in statuses) ButtonSegment(value: s, label: Text(_cap(s)))],
                       selected: {f.status},
-                      onSelectionChanged: (s) => CommunityRepository().setFeedbackStatus(f.id, s.first),
+                      onSelectionChanged: (s) {
+                        final a = adminOf(context);
+                        CommunityRepository().setFeedbackStatus(f.id, f.status, s.first,
+                            adminUid: a.uid, adminName: a.name);
+                      },
                     ),
                   ]),
                 ),

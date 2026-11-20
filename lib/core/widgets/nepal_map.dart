@@ -75,6 +75,10 @@ class NepalMap extends StatefulWidget {
   final ValueChanged<String>? onTap;
   final bool interactive;
 
+  /// Full-screen use: Nepal is wide, so in a tall box start zoomed in a
+  /// little and show zoom buttons.
+  final bool fillHeight;
+
   const NepalMap({
     super.key,
     required this.labelToId,
@@ -83,6 +87,7 @@ class NepalMap extends StatefulWidget {
     this.selectedId,
     this.onTap,
     this.interactive = true,
+    this.fillHeight = false,
   });
 
   @override
@@ -92,6 +97,32 @@ class NepalMap extends StatefulWidget {
 class _NepalMapState extends State<NepalMap> {
   List<MapShape>? _shapes;
   final _controller = TransformationController();
+  Size? _fittedFor;
+  Matrix4 _home = Matrix4.identity();
+
+  /// Zoom by [factor] around the centre of the [viewport].
+  Matrix4 _zoomed(Matrix4 from, double factor, Size viewport) {
+    final current = from.getMaxScaleOnAxis();
+    final target = (current * factor).clamp(1.0, 6.0);
+    final f = target / current;
+    final cx = viewport.width / 2, cy = viewport.height / 2;
+    return Matrix4.identity()
+      ..translateByDouble(cx * (1 - f), cy * (1 - f), 0, 1)
+      ..scaleByDouble(f, f, 1, 1)
+      ..multiply(from);
+  }
+
+  void _fitHeight(Size viewport, Size mapSize) {
+    if (_fittedFor == viewport) return;
+    _fittedFor = viewport;
+    // Enough to make districts easy to tap while keeping most of the
+    // country in view; pan or use the buttons for the rest.
+    final zoom = (viewport.height * .5 / mapSize.height).clamp(1.0, 1.6);
+    _home = _zoomed(Matrix4.identity(), zoom, viewport);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _controller.value = _home;
+    });
+  }
 
   @override
   void initState() {
@@ -175,13 +206,35 @@ class _NepalMapState extends State<NepalMap> {
           ),
         );
       }
-      return InteractiveViewer(
+      final viewer = InteractiveViewer(
         transformationController: _controller,
         minScale: 1,
         maxScale: 6,
         boundaryMargin: const EdgeInsets.all(40),
         child: Center(child: map),
       );
+      if (!widget.fillHeight || !c.maxHeight.isFinite) return viewer;
+      final viewport = Size(c.maxWidth, c.maxHeight);
+      _fitHeight(viewport, size);
+      Widget button(IconData icon, String tip, VoidCallback onTap) => Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: IconButton.filledTonal(tooltip: tip, icon: Icon(icon), onPressed: onTap),
+          );
+      return Stack(children: [
+        Positioned.fill(child: viewer),
+        Positioned(
+          right: 4,
+          bottom: 4,
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            button(Icons.add, 'Zoom in',
+                () => _controller.value = _zoomed(_controller.value, 1.5, viewport)),
+            button(Icons.remove, 'Zoom out',
+                () => _controller.value = _zoomed(_controller.value, 1 / 1.5, viewport)),
+            button(Icons.center_focus_strong, 'Reset view',
+                () => _controller.value = _home.clone()),
+          ]),
+        ),
+      ]);
     });
   }
 }

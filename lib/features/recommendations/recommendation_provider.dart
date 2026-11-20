@@ -94,7 +94,7 @@ class RecommendationProvider extends ChangeNotifier {
       districts: d.districts.map(toRec).toList(),
       visitedIds: v.visitedIds,
       excludedIds: _feedback.entries
-          .where((e) => e.value == 'not_interested' || e.value == 'reported')
+          .where((e) => e.value == 'not_interested')
           .map((e) => e.key)
           .toSet(),
       dnaScores: dna.scores,

@@ -159,7 +159,7 @@ lib/
 | `alerts/{id}` | districtId, message, expiresAt, createdBy | read: signed-in · write: admin |
 | `feedback/{id}` | type (`app`/`recommendation`/`district_info`), uid, rating, category, text, status (`new`/`reviewed`/`resolved`) | create: signed-in · read/update: admin |
 | `changeLog/{id}` | entity, entityId, field, oldValue, newValue, adminUid, at | read/write: admin |
-| `stats/districtVisits` | {districtId: count} (totals only, NFR-14) | read: admin · write: Cloud Function or counter increment |
+| `districtStats/{districtId}` | {visits: count} (totals only, NFR-14) | read: admin · write: ±1 only, in the same batch that adds or removes the user's own visit |
 
 **Rules hint (the core of TC-05 and TC-38):** write `firestore.rules` in Sprint 1 and test it with the Firebase Emulator. The key idea:
 
@@ -356,7 +356,7 @@ Now pass `recommendedIds` into the S3 map.
 | **US-14.1** App feedback | Lok | 1.5 | Rating + category + comment → `feedback`. | Reuse the layout from Hariyo's `feedback_screen.dart`, but write to Firestore instead of email. | Manual |
 | **US-14.2** Report recommendation | Chhanda | 1.5 | "Report" on a recommendation card. | Same collection, `type: 'recommendation'`. | Manual |
 | **US-14.3** Report wrong info | Lok | 1.5 | "Report wrong information" on the district page (cost/transport/season…). | `type: 'district_info'`. | TC-35 |
-| **US-15.3** District analytics | Pratish | 3 | Admin charts: districts per province and type, less-explored count, visits per district (**totals only**). | Increment `stats/districtVisits.{id}` with `FieldValue.increment(1)` whenever a visit is added. Admins never read `users/*`. | TC-34 |
+| **US-15.3** District analytics | Pratish | 3 | Admin charts: districts per province and type, less-explored count, visits per district (**totals only**). | Increment `districtStats/{id}.visits` with `FieldValue.increment(1)` in the same batch that adds the visit (the rules check this). Admins never read `users/*`. | TC-34 |
 | **US-15.4** Recent changes | Pratish | 2 | `changeLog` list: newest first, with date and admin. | You've been writing it since S1, so this is only the read side. | Manual |
 | **US-15.5** Feedback inbox | Pooja | 2 | Admin inbox with filters; New → Reviewed → Resolved. | | TC-36 |
 | **US-15.7** Moderate reviews | Pooja | 1.5 | Admin deletes a review; the average updates; logged. | | TC-40 |

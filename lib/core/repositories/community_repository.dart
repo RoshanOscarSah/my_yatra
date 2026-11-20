@@ -130,10 +130,23 @@ class CommunityRepository {
         ..sort((a, b) => (b.createdAt ?? DateTime.now())
             .compareTo(a.createdAt ?? DateTime.now())));
 
-  Future<void> setFeedbackStatus(String id, String status) => softWrite(
-      _db.collection('feedback').doc(id).update({
-        'status': status,
+  /// Changes the status and appends the change to the item's history, so
+  /// the inbox shows who changed what and when.
+  Future<void> setFeedbackStatus(String id, String from, String to,
+          {required String adminUid, required String adminName}) =>
+      softWrite(_db.collection('feedback').doc(id).update({
+        'status': to,
         'statusUpdatedAt': FieldValue.serverTimestamp(),
+        'statusHistory': FieldValue.arrayUnion([
+          {
+            'from': from,
+            'to': to,
+            'adminUid': adminUid,
+            'adminName': adminName,
+            // serverTimestamp() is not allowed inside arrays.
+            'at': Timestamp.now(),
+          }
+        ]),
       }));
 
   // ---------------- Admin: change log & stats ----------------
@@ -146,12 +159,9 @@ class CommunityRepository {
       .map((q) =>
           q.docs.map((d) => ChangeLogEntry.fromMap(d.id, d.data())).toList());
 
-  Stream<Map<String, int>> districtVisitTotals() => _db
-      .collection('stats')
-      .doc('districtVisits')
-      .snapshots()
-      .map((s) => {
-            for (final e in (s.data() ?? {}).entries)
-              e.key: (e.value as num?)?.toInt() ?? 0
+  Stream<Map<String, int>> districtVisitTotals() =>
+      _db.collection('districtStats').snapshots().map((q) => {
+            for (final d in q.docs)
+              d.id: (d.data()['visits'] as num?)?.toInt() ?? 0
           });
 }

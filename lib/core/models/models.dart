@@ -558,6 +558,9 @@ class FeedbackItem {
   final String? dnaType;
   final DateTime? createdAt;
 
+  /// Every status change, oldest first (US-15.5).
+  final List<FeedbackStatusChange> history;
+
   const FeedbackItem({
     required this.id,
     required this.type,
@@ -569,6 +572,7 @@ class FeedbackItem {
     this.districtId,
     this.dnaType,
     this.createdAt,
+    this.history = const [],
   });
 
   Map<String, dynamic> toMap() => {
@@ -595,6 +599,27 @@ class FeedbackItem {
         districtId: m['districtId']?.toString(),
         dnaType: m['dnaType']?.toString(),
         createdAt: _date(m['createdAt']),
+        history: [
+          for (final h in (m['statusHistory'] as List?) ?? const [])
+            if (h is Map) FeedbackStatusChange.fromMap(Map<String, dynamic>.from(h))
+        ],
+      );
+}
+
+class FeedbackStatusChange {
+  final String from;
+  final String to;
+  final String adminName;
+  final DateTime? at;
+
+  const FeedbackStatusChange(
+      {required this.from, required this.to, required this.adminName, this.at});
+
+  factory FeedbackStatusChange.fromMap(Map<String, dynamic> m) => FeedbackStatusChange(
+        from: m['from']?.toString() ?? '',
+        to: m['to']?.toString() ?? '',
+        adminName: m['adminName']?.toString() ?? '',
+        at: _date(m['at']),
       );
 }
 

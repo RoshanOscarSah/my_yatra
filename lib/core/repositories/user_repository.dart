@@ -40,21 +40,25 @@ class UserRepository {
   Stream<List<Visit>> visits() => _visits.snapshots().map((q) =>
       q.docs.map((d) => Visit.fromMap(d.id, d.data())).toList());
 
-  Future<void> saveVisit(Visit v, {bool isNew = false}) async {
-    await softWrite(_visits.doc(v.districtId).set(v.toMap()));
-    if (isNew) await _bumpStat(v.districtId, 1);
+  /// A new visit and its +1 on the district total go in one batch: the
+  /// rules only allow the total to change together with a real visit.
+  Future<void> saveVisit(Visit v, {bool isNew = false}) {
+    final batch = _db.batch()..set(_visits.doc(v.districtId), v.toMap());
+    if (isNew) _bumpStat(batch, v.districtId, 1);
+    return softWrite(batch.commit());
   }
 
-  Future<void> deleteVisit(String districtId) async {
-    await softWrite(_visits.doc(districtId).delete());
-    await _bumpStat(districtId, -1);
+  Future<void> deleteVisit(String districtId) {
+    final batch = _db.batch()..delete(_visits.doc(districtId));
+    _bumpStat(batch, districtId, -1);
+    return softWrite(batch.commit());
   }
 
   /// Aggregate totals only (NFR-14): no user id is stored with the count.
-  Future<void> _bumpStat(String districtId, int by) => softWrite(_db
-      .collection('stats')
-      .doc('districtVisits')
-      .set({districtId: FieldValue.increment(by)}, SetOptions(merge: true)));
+  void _bumpStat(WriteBatch batch, String districtId, int by) => batch.set(
+      _db.collection('districtStats').doc(districtId),
+      {'visits': FieldValue.increment(by)},
+      SetOptions(merge: true));
 
   // ---------------- Journal ----------------
 
@@ -155,12 +159,7 @@ class UserRepository {
       final snap = await _user.collection(name).get();
       final batch = _db.batch();
       for (final d in snap.docs) {
-        if (name == 'visits') {
-          batch.set(
-              _db.collection('stats').doc('districtVisits'),
-              {d.id: FieldValue.increment(-1)},
-              SetOptions(merge: true));
-        }
+        if (name == 'visits') _bumpStat(batch, d.id, -1);
         batch.delete(d.reference);
       }
       await batch.commit();

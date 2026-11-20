@@ -83,13 +83,40 @@ class RecordPlacesSheet extends StatefulWidget {
 
 class _RecordPlacesSheetState extends State<RecordPlacesSheet> {
   late List<VisitPlace> _places;
+  late String _saved;
   final _custom = TextEditingController();
   bool _busy = false;
+
+  static String _key(List<VisitPlace> l) =>
+      l.map((p) => p.toMap().toString()).join('|');
+
+  /// Unsaved edits, including a place name typed but not yet added.
+  bool get _dirty => _key(_places) != _saved || _custom.text.trim().isNotEmpty;
 
   @override
   void initState() {
     super.initState();
     _places = [...?context.read<VisitProvider>().visitFor(widget.districtId)?.places];
+    _saved = _key(_places);
+    // Rebuild while typing so Back knows about a half-typed place name.
+    _custom.addListener(() => setState(() {}));
+  }
+
+  /// Back, the close button and tapping outside all ask before throwing
+  /// away changes.
+  Future<void> _confirmDiscard() async {
+    final discard = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Discard changes?'),
+        content: const Text('The places and activities you changed have not been saved.'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Keep editing')),
+          TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Discard')),
+        ],
+      ),
+    );
+    if (discard == true && mounted) Navigator.pop(context);
   }
 
   @override
@@ -116,7 +143,12 @@ class _RecordPlacesSheetState extends State<RecordPlacesSheet> {
     final d = dp.byId(widget.districtId);
     final visit = context.watch<VisitProvider>().visitFor(widget.districtId);
 
-    return SafeArea(
+    return PopScope(
+      canPop: !_dirty,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _confirmDiscard();
+      },
+      child: SafeArea(
       child: Padding(
         padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: SizedBox(
@@ -134,7 +166,7 @@ class _RecordPlacesSheetState extends State<RecordPlacesSheet> {
                     ),
                   ]),
                 ),
-                IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close)),
+                IconButton(onPressed: () => Navigator.maybePop(context), icon: const Icon(Icons.close)),
               ]),
             ),
             Expanded(
@@ -238,6 +270,7 @@ class _RecordPlacesSheetState extends State<RecordPlacesSheet> {
             ),
           ]),
         ),
+      ),
       ),
     );
   }

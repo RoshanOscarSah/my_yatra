@@ -103,10 +103,30 @@ service cloud.firestore {
     }
 
     // ---------- Aggregate visit totals only (US-15.3, NFR-14) ----------
-    match /stats/districtVisits {
+    // One document per district: {visits: n}. No user id is stored. A
+    // traveller can only move a total by one, and only in the same batch
+    // that creates (+1) or deletes (-1) their own visit to that district,
+    // so totals cannot be inflated by hand.
+    match /districtStats/{districtId} {
+      function myVisit() {
+        return /databases/$(database)/documents/users/$(request.auth.uid)/visits/$(districtId);
+      }
+      function addsVisit() {
+        return !exists(myVisit()) && existsAfter(myVisit());
+      }
+      function removesVisit() {
+        return exists(myVisit()) && !existsAfter(myVisit());
+      }
+      function onlyVisits() {
+        return request.resource.data.keys().hasOnly(['visits'])
+          && request.resource.data.visits is int;
+      }
       allow read: if isAdmin();
-      // Any signed-in user may bump a counter, but cannot read who did it.
-      allow create, update: if signedIn();
+      allow create: if signedIn() && onlyVisits()
+        && request.resource.data.visits == 1 && addsVisit();
+      allow update: if signedIn() && onlyVisits() && (
+        (request.resource.data.visits == resource.data.visits + 1 && addsVisit())
+        || (request.resource.data.visits == resource.data.visits - 1 && removesVisit()));
     }
   }
 }

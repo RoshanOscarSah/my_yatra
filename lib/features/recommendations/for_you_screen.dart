@@ -264,11 +264,23 @@ class _RecommendationCardState extends State<RecommendationCard> {
           ),
           IconButton(
             tooltip: 'Report',
+            isSelected: fb == 'reported',
+            selectedIcon: const Icon(Icons.flag, color: AppColors.primary),
             icon: const Icon(Icons.flag_outlined),
             onPressed: () async {
-              if (await openReportRecommendation(context, d.id, dnaType)) {
-                recs.markReported(d.id);
-              }
+              if (!await openReportRecommendation(context, d.id, dnaType)) return;
+              recs.markReported(d.id);
+              if (!context.mounted) return;
+              // Reporting does not hide the pick on its own; the user decides.
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(SnackBar(
+                  content: Text('Report sent. Hide ${d.name} from your picks too?'),
+                  action: SnackBarAction(
+                      label: 'Hide it', onPressed: () => recs.markNotInterested(d.id)),
+                  persist: false,
+                  duration: const Duration(seconds: 6),
+                ));
             },
           ),
         ]),

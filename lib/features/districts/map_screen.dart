@@ -56,6 +56,7 @@ class _MapScreenState extends State<MapScreen> {
                 visitedIds: visits.visitedIds,
                 recommendedIds: recs.recommendedIds,
                 selectedId: _selected,
+                fillHeight: true,
                 onTap: (id) => setState(() => _selected = id),
               ),
             ),
