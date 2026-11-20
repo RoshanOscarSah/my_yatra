@@ -56,4 +56,4 @@ key.properties
 # Firebase emulator data / logs
 .firebase/
 *-debug.log
-emulator-data/
+emulator-data*/

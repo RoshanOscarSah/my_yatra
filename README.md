@@ -54,8 +54,15 @@ emulators automatically.
 Requirements: Flutter 3.41+, Node 18+, Java 21+ (needed by the emulators), and the Firebase CLI (`npm i -g firebase-tools`).
 
 ```bash
-firebase emulators:start
+tool/emulators.sh
 ```
+
+This starts the emulators and keeps their data (accounts, Firestore, uploaded
+photos) in `emulator-data/` between runs. It saves every 60 seconds and once
+more when you press Ctrl+C, so a crash or reboot loses at most the last minute.
+`emulator-data/` is git-ignored. To start from empty data, stop the emulators
+and delete that folder. Plain `firebase emulators:start` still works but starts
+empty every time.
 
 In a second terminal:
 
