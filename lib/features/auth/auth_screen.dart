@@ -34,6 +34,8 @@ class _AuthScreenState extends State<AuthScreen>
   bool _regObscure = true;
   bool _policy = false;
   bool _policyHighlight = false;
+  bool _signInTried = false;
+  bool _registerTried = false;
   bool _busy = false;
   String? _error;
 
@@ -68,12 +70,16 @@ class _AuthScreenState extends State<AuthScreen>
   }
 
   void _signIn() {
+    // After the first attempt, re-check each field as it is edited so a
+    // fixed field loses its error straight away.
+    setState(() => _signInTried = true);
     if (!_signInKey.currentState!.validate()) return;
     final auth = context.read<AuthProvider>();
     _run(() => auth.signIn(_email.text, _password.text));
   }
 
   void _register() {
+    setState(() => _registerTried = true);
     final valid = _registerKey.currentState!.validate();
     if (!_policy) {
       // US-1.1 / TC-02: block sign-up and highlight the policy link.
@@ -169,6 +175,7 @@ class _AuthScreenState extends State<AuthScreen>
   Widget _signInForm() {
     return Form(
       key: _signInKey,
+      autovalidateMode: _signInTried ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -217,6 +224,7 @@ class _AuthScreenState extends State<AuthScreen>
   Widget _registerForm() {
     return Form(
       key: _registerKey,
+      autovalidateMode: _registerTried ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
