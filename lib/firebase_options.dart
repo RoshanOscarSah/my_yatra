@@ -9,13 +9,27 @@
 // --dart-define=USE_EMULATOR=false (see README.md).
 
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
+import 'package:flutter/foundation.dart'
+    show TargetPlatform, defaultTargetPlatform, kIsWeb;
 
 class DefaultFirebaseOptions {
   static const bool isDemo = true;
 
-  static FirebaseOptions get currentPlatform => const FirebaseOptions(
+  // The native iOS/Android SDKs reject an app id whose platform segment
+  // does not match, so each platform gets a well-formed placeholder.
+  static String get _appId {
+    if (kIsWeb) return '1:000000000000:web:0000000000000000000000';
+    return switch (defaultTargetPlatform) {
+      TargetPlatform.iOS ||
+      TargetPlatform.macOS =>
+        '1:000000000000:ios:0000000000000000000000',
+      _ => '1:000000000000:android:0000000000000000000000',
+    };
+  }
+
+  static FirebaseOptions get currentPlatform => FirebaseOptions(
         apiKey: 'demo-api-key',
-        appId: '1:000000000000:web:0000000000000000000000',
+        appId: _appId,
         messagingSenderId: '000000000000',
         projectId: 'demo-myyatra',
         storageBucket: 'demo-myyatra.appspot.com',
