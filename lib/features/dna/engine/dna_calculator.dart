@@ -238,8 +238,17 @@ class DnaCalculator {
     final rare = r.ranked.where(r.gaps.contains).toList().reversed.toList();
     final parts = <String>[];
     if (explored.isNotEmpty) {
-      parts.add('You have mostly explored '
-          '${_list(explored.take(2).map((e) => e.label.toLowerCase()))} places.');
+      // When more than two categories share the top share, naming only two
+      // of them would be wrong, so name them all.
+      final topShare = r.visitShare[explored.first] ?? 0;
+      final tied = explored.where((c) => (r.visitShare[c] ?? 0) == topShare).toList();
+      if (tied.length > 2) {
+        parts.add('You have explored '
+            '${_list(tied.map((e) => e.label.toLowerCase()))} places about equally.');
+      } else {
+        parts.add('You have mostly explored '
+            '${_list(explored.take(2).map((e) => e.label.toLowerCase()))} places.');
+      }
     }
     if (rare.isNotEmpty) {
       final none = rare.where((c) => (r.visitShare[c] ?? 0) == 0).toList();

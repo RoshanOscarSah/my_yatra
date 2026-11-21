@@ -141,7 +141,9 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
               backgroundColor: AppColors.primarySoft,
             ),
             Expanded(
-              child: ListView(padding: const EdgeInsets.all(20), children: [
+              // A new key per step so each step starts at the top instead of
+              // keeping the previous step's scroll position.
+              child: ListView(key: ValueKey(_step), padding: const EdgeInsets.all(20), children: [
                 Text(titles[_step], style: AppTheme.serif(26)),
                 const SizedBox(height: 6),
                 Text(subtitles[_step], style: const TextStyle(color: AppColors.textSecondary)),

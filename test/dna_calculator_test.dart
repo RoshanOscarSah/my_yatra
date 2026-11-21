@@ -115,4 +115,16 @@ void main() {
     ));
     expect(r.gapSummary, startsWith('You have mostly explored culture and nature places.'));
   });
+
+  test('gap summary names every type when more than two tie', () {
+    final r = DnaCalculator.calculate(const DnaInput(
+      interests: {n},
+      visitedDistrictTypes: [
+        [n, c, h],
+        [n, c, h],
+      ],
+    ));
+    expect(r.gapSummary,
+        startsWith('You have explored nature, culture and history places about equally.'));
+  });
 }

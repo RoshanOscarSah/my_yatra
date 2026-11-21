@@ -31,7 +31,8 @@ class UserStats {
   final Map<int, int> perProvince; // province -> visited districts
   final int journeys;
   final Map<String, int> journeysPerYear; // "2025" / "Before MyYatra"
-  final Experience? topCategory;
+  final Experience? topCategory; // null when there is no visit or a tie
+  final bool topTied; // two or more categories share the top count
   final Map<Experience, int> perCategory; // visited districts per category
   final Set<String> visitedIds;
 
@@ -41,6 +42,7 @@ class UserStats {
     required this.journeys,
     required this.journeysPerYear,
     required this.topCategory,
+    this.topTied = false,
     required this.perCategory,
     required this.visitedIds,
   });
@@ -85,13 +87,17 @@ class UserStats {
         top = e;
       }
     }
+    // A tie has no single "most explored" category; the screen shows "Mixed".
+    final topTied = top != null &&
+        Experience.values.where((e) => perCategory[e] == perCategory[top]).length > 1;
 
     return UserStats(
       visitedCount: ids.length,
       perProvince: perProvince,
       journeys: journeys,
       journeysPerYear: perYear,
-      topCategory: top,
+      topCategory: topTied ? null : top,
+      topTied: topTied,
       perCategory: perCategory,
       visitedIds: ids,
     );

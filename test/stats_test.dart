@@ -21,6 +21,15 @@ void main() {
     expect(s.topCategory, Experience.culture);
   });
 
+  test('a tie for most explored has no single top category', () {
+    final s = UserStats.compute(const [
+      StatsVisit(districtId: 'ilam', province: 1, districtTypes: [Experience.nature]),
+      StatsVisit(districtId: 'kathmandu', province: 3, districtTypes: [Experience.culture]),
+    ], []);
+    expect(s.topTied, isTrue);
+    expect(s.topCategory, isNull);
+  });
+
   test('badges unlock at milestones (TC-28)', () {
     final s = UserStats.compute(visits, []);
     final first = milestoneBadges.firstWhere((b) => b.id == 'first');

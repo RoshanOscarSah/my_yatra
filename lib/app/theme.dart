@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 /// MyYatra design tokens (Sprint guide §5, from the Figma screens).
@@ -58,6 +59,10 @@ class AppTheme {
         scrolledUnderElevation: 0,
         centerTitle: false,
         titleTextStyle: serif(20),
+        // Dark status bar icons on every app bar. Without this, app bars with
+        // a see-through background (such as the full-screen date range
+        // picker) get white icons that vanish on the cream background.
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
       cardTheme: CardThemeData(
         color: AppColors.surface,

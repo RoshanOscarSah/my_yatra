@@ -303,7 +303,7 @@ class StatsTab extends StatelessWidget {
       InfoCard(
         child: Row(children: [
           StatTile('${s.journeys}', s.journeys == 1 ? 'journey' : 'journeys'),
-          StatTile(s.topCategory?.label ?? '—', 'most explored'),
+          StatTile(s.topTied ? 'Mixed' : s.topCategory?.label ?? '—', 'most explored'),
         ]),
       ),
       const SectionTitle('Journeys per year'),
