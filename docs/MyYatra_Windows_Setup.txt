@@ -1,0 +1,109 @@
+MyYatra - How to run it on Windows
+==================================
+
+The "administrator access required" message is normal on Windows. Flutter
+needs Developer Mode turned on, and turning it on (and installing the tools
+below) needs admin rights. Do the steps below once, in order.
+
+Note: the iPhone simulator only works on a Mac. On Windows, use an Android
+emulator (or a real Android phone).
+
+
+STEP 1 - Turn on Developer Mode (needs admin, one time only)
+-------------------------------------------------------------
+1. Open Settings.
+2. Windows 11: System > For developers.
+   Windows 10: Update & Security > For developers.
+3. Switch "Developer Mode" ON and click Yes.
+   (If Windows asks for an administrator password, enter it. On a school or
+   work laptop you may need to ask IT.)
+
+
+STEP 2 - Install the tools (one time only)
+------------------------------------------
+Install these, accepting the defaults:
+
+1. Flutter SDK 3.41 or newer
+   https://docs.flutter.dev/get-started/install/windows
+2. Android Studio (it includes the Android SDK and the Android emulator)
+   https://developer.android.com/studio
+   After installing: open Android Studio > More Actions > Virtual Device
+   Manager > create a phone (e.g. Pixel) and start it once.
+3. Node.js 18 or newer (LTS)
+   https://nodejs.org
+4. Java 21 or newer (needed by the Firebase emulators)
+   https://adoptium.net  (choose Temurin 21, tick "Set JAVA_HOME")
+5. Git
+   https://git-scm.com/download/win
+
+Close and reopen PowerShell after installing, then install the Firebase CLI:
+
+    npm install -g firebase-tools
+
+Check everything is ready:
+
+    flutter doctor
+    java -version
+    firebase --version
+
+In "flutter doctor", the Windows/Android lines should have green ticks.
+If it says Android licenses are not accepted, run:
+
+    flutter doctor --android-licenses
+
+and type y for each one.
+
+
+STEP 3 - Start the database emulators (every time)
+--------------------------------------------------
+Do NOT run tool/emulators.sh - that file is for Mac/Linux only.
+
+Open PowerShell in the my_yatra folder and run:
+
+    firebase emulators:start --project demo-myyatra --import emulator-data --export-on-exit emulator-data
+
+Leave this window open. When it says "All emulators ready", it is working.
+The emulator dashboard is at http://localhost:4000
+(The first time there is no saved data yet, which is fine. Stop it with
+Ctrl+C so the data is saved for next time.)
+
+If Windows Firewall pops up asking about Java or Node, click "Allow".
+
+
+STEP 4 - Run the app (every time)
+---------------------------------
+1. Start the Android emulator from Android Studio (Device Manager > Play).
+2. Open a SECOND PowerShell window in the my_yatra folder and run:
+
+    flutter pub get
+    flutter run
+
+3. If it asks which device, pick the Android emulator (not Chrome/Windows).
+
+The first build takes several minutes. After that it is much faster.
+
+
+Common problems
+---------------
+"Building with plugins requires symlink support"
+    -> Developer Mode is off. Do Step 1.
+
+"'firebase' is not recognized" or "'flutter' is not recognized"
+    -> Close and reopen PowerShell. If it still fails, reinstall and make
+       sure the installer added it to PATH.
+
+"running scripts is disabled on this system" (when running firebase)
+    -> Run PowerShell as Administrator once and type:
+           Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+       then answer Y. Or use Command Prompt (cmd) instead of PowerShell.
+
+"Could not start Firestore emulator ... Java"
+    -> Java 21 is missing. Do Step 2, item 4, then reopen PowerShell.
+
+The app opens but cannot log in / says it cannot connect
+    -> Make sure the emulator window from Step 3 is still open and says
+       "All emulators ready".
+
+Path errors or very long build failures
+    -> Put the project in a short path with no spaces, for example
+       C:\dev\my_yatra
