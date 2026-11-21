@@ -1,0 +1,114 @@
+{
+ "intro": [
+  "af_heart",
+  "Welcome to MyYatra, your travel story across Nepal. Here's how to use the app, in twelve quick steps."
+ ],
+ "outro": [
+  "af_heart",
+  "That's MyYatra. Mark your first district, and start your yatra."
+ ],
+ "01_welcome": [
+  "af_heart",
+  "Open the app and tap Get started."
+ ],
+ "02_signup": [
+  "af_heart",
+  "Add your name, email and a password, accept the privacy policy, and create your account."
+ ],
+ "03_interests": [
+  "af_heart",
+  "Next, tell MyYatra what you love. Choose as many kinds of places as you like. This starts your Journey DNA."
+ ],
+ "04_style": [
+  "af_heart",
+  "Then answer a few questions about how often you travel, your style, and who you go with."
+ ],
+ "05_plan": [
+  "af_heart",
+  "Set your usual budget, how far you're happy to go, and your favourite season."
+ ],
+ "06_visited": [
+  "af_heart",
+  "Finally, tick any districts you've already visited, and tap Finish setup."
+ ],
+ "07_home": [
+  "af_heart",
+  "Your home screen shows your footprint across Nepal, your Journey DNA, and fresh picks every week."
+ ],
+ "08_explore": [
+  "af_heart",
+  "In Explore, search all seventy-seven districts, or filter them by province."
+ ],
+ "09_district": [
+  "af_heart",
+  "Tap a district to see the best season, the cost, how to get there, and local festivals and food."
+ ],
+ "10_mark": [
+  "af_heart",
+  "Been there? Tap Mark visited, and choose the date of your trip."
+ ],
+ "11_places": [
+  "af_heart",
+  "Add the places you went, and tag what you did at each one."
+ ],
+ "12_visited_card": [
+  "af_heart",
+  "Your visit now shows on the district page, ready to edit any time."
+ ],
+ "13_safety": [
+  "af_heart",
+  "Every district has safety notes, emergency numbers, and a quick check-in to say you're safe."
+ ],
+ "14_review": [
+  "af_heart",
+  "Share your experience with a star rating and a short review."
+ ],
+ "15_review_done": [
+  "af_heart",
+  "Your review is published for other travellers to read."
+ ],
+ "16_offline": [
+  "af_heart",
+  "And save the district for offline, so it's there even without signal."
+ ],
+ "17_itinerary": [
+  "af_heart",
+  "Planning a trip? Create an itinerary with dates, a budget and your companions, then fill in each day."
+ ],
+ "18_map": [
+  "af_heart",
+  "The footprint map colours every district: visited, recommended, or not yet explored."
+ ],
+ "19_foryou": [
+  "af_heart",
+  "For you ranks the districts that fit your DNA and plans, and tells you why. Give a thumbs up or down to tune them."
+ ],
+ "20_dna": [
+  "af_heart",
+  "Journey DNA turns your interests and visits into a traveller type, with scores across six categories."
+ ],
+ "21_gaps": [
+  "af_heart",
+  "Gap analysis shows what you haven't explored yet, and which provinces to try next."
+ ],
+ "22_journal_form": [
+  "af_heart",
+  "Keep a journal. Write about each trip, with dates, a story and photos."
+ ],
+ "23_journal": [
+  "af_heart",
+  "All your entries and your travel history live in one tab."
+ ],
+ "24_stats": [
+  "af_heart",
+  "And statistics track your districts, provinces and journeys over time."
+ ],
+ "25_profile": [
+  "af_heart",
+  "Your profile brings it all together: your DNA, badges, itineraries and downloads."
+ ],
+ "26_badges": [
+  "af_heart",
+  "Earn badges as you travel, and take on district challenges."
+ ]
+}

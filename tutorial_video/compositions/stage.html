@@ -1,0 +1,126 @@
+<template>
+  <style>
+    
+@font-face { font-family: 'Lora'; font-weight: 600; src: url('assets/fonts/Lora-SemiBold.ttf'); }
+
+    #root { position: absolute; inset: 0; 
+  --background: #FFF6EC; --surface: #FFFFFF; --primary: #8B2635;
+  --primary-soft: #F3DDE0; --lavender: #EDE6F6; --gold-soft: #FBF0D9;
+  --gold: #E0A63A; --text: #2A1E1E; --text-2: #6E625F; --border: #EADBCB;
+
+      background: var(--background); overflow: hidden; }
+    #stage-glow-a { position: absolute; width: 1100px; height: 1100px; left: -260px; top: -40px;
+      border-radius: 50%; background: radial-gradient(circle, rgba(243,221,224,0.95) 0%, rgba(243,221,224,0) 68%); }
+    #stage-glow-b { position: absolute; width: 900px; height: 900px; right: -300px; bottom: -420px;
+      border-radius: 50%; background: radial-gradient(circle, rgba(251,240,217,1) 0%, rgba(251,240,217,0) 70%); }
+    #stage-brand { position: absolute; left: 72px; top: 54px; display: flex; align-items: center; gap: 12px;
+      font-family: 'Lora'; font-weight: 600; font-size: 30px; color: var(--primary); }
+    #stage-brand span { font-family: 'Inter'; font-weight: 400; font-size: 28px; color: var(--text-2);
+      padding-left: 14px; border-left: 2px solid var(--border); }
+    #stage-dot { width: 16px; height: 16px; border-radius: 50%; background: var(--primary); }
+    #stage-phone { position: absolute; left: 384px; top: 86px; width: 433px; height: 908px;
+      border-radius: 70px; background: #1C1416; padding: 14px;
+      box-shadow: 0 50px 90px rgba(139,38,53,0.20), 0 10px 24px rgba(42,30,30,0.18), inset 0 0 0 2px #3a2d30; }
+    #stage-screen { position: relative; width: 405px; height: 880px; border-radius: 56px; overflow: hidden;
+      background: var(--background); }
+    .scr { position: absolute; left: 0; top: 0; width: 100%; height: 100%; box-shadow: -12px 0 30px rgba(42,30,30,0.18); }
+    #stage-island { position: absolute; left: 50%; top: 11px; width: 118px; height: 34px; margin-left: -59px;
+      border-radius: 20px; background: #000; z-index: 200; }
+  </style>
+  <div id="root" data-composition-id="stage" data-width="1920" data-height="1080">
+    <div id="stage-glow-a" data-layout-allow-overflow></div>
+    <div id="stage-glow-b" data-layout-allow-overflow></div>
+    <div id="stage-brand"><div id="stage-dot"></div>MyYatra<span>App tutorial</span></div>
+    <div id="stage-phone">
+      <div id="stage-screen">
+        <img id="scr-00" class="clip scr" src="assets/shots/01_welcome.png" alt="" data-start="0.0" data-duration="12.5333" data-track-index="2" style="z-index:1" />
+        <img id="scr-01" class="clip scr" src="assets/shots/02_signup.png" alt="" data-start="12.0333" data-duration="6.8" data-track-index="3" style="z-index:2" />
+        <img id="scr-02" class="clip scr" src="assets/shots/03_interests.png" alt="" data-start="18.3333" data-duration="8.5333" data-track-index="2" style="z-index:3" />
+        <img id="scr-03" class="clip scr" src="assets/shots/04_style.png" alt="" data-start="26.3667" data-duration="6.3" data-track-index="3" style="z-index:4" />
+        <img id="scr-04" class="clip scr" src="assets/shots/05_plan.png" alt="" data-start="32.1667" data-duration="5.2667" data-track-index="2" style="z-index:5" />
+        <img id="scr-05" class="clip scr" src="assets/shots/06_visited.png" alt="" data-start="36.9333" data-duration="5.5" data-track-index="3" style="z-index:6" />
+        <img id="scr-06" class="clip scr" src="assets/shots/07_home.png" alt="" data-start="41.9333" data-duration="7.7333" data-track-index="2" style="z-index:7" />
+        <img id="scr-07" class="clip scr" src="assets/shots/08_explore.png" alt="" data-start="49.1667" data-duration="6.3" data-track-index="3" style="z-index:8" />
+        <img id="scr-08" class="clip scr" src="assets/shots/09_district.png" alt="" data-start="54.9667" data-duration="6.8667" data-track-index="2" style="z-index:9" />
+        <img id="scr-09" class="clip scr" src="assets/shots/10_mark.png" alt="" data-start="61.3333" data-duration="5.1667" data-track-index="3" style="z-index:10" />
+        <img id="scr-10" class="clip scr" src="assets/shots/11_places.png" alt="" data-start="66.0" data-duration="4.8" data-track-index="2" style="z-index:11" />
+        <img id="scr-11" class="clip scr" src="assets/shots/12_visited_card.png" alt="" data-start="70.3" data-duration="5.3333" data-track-index="3" style="z-index:12" />
+        <img id="scr-12" class="clip scr" src="assets/shots/13_safety.png" alt="" data-start="75.1333" data-duration="7.0667" data-track-index="2" style="z-index:13" />
+        <img id="scr-13" class="clip scr" src="assets/shots/14_review.png" alt="" data-start="81.7" data-duration="4.6333" data-track-index="3" style="z-index:14" />
+        <img id="scr-14" class="clip scr" src="assets/shots/15_review_done.png" alt="" data-start="85.8333" data-duration="4.1" data-track-index="2" style="z-index:15" />
+        <img id="scr-15" class="clip scr" src="assets/shots/16_offline.png" alt="" data-start="89.4333" data-duration="5.2667" data-track-index="3" style="z-index:16" />
+        <img id="scr-16" class="clip scr" src="assets/shots/17_itinerary.png" alt="" data-start="94.2" data-duration="7.9667" data-track-index="2" style="z-index:17" />
+        <img id="scr-17" class="clip scr" src="assets/shots/18_map.png" alt="" data-start="101.6667" data-duration="7.2" data-track-index="3" style="z-index:18" />
+        <img id="scr-18" class="clip scr" src="assets/shots/19_foryou.png" alt="" data-start="108.3667" data-duration="8.8333" data-track-index="2" style="z-index:19" />
+        <img id="scr-19" class="clip scr" src="assets/shots/20_dna.png" alt="" data-start="116.7" data-duration="7.7667" data-track-index="3" style="z-index:20" />
+        <img id="scr-20" class="clip scr" src="assets/shots/21_gaps.png" alt="" data-start="123.9667" data-duration="6.4" data-track-index="2" style="z-index:21" />
+        <img id="scr-21" class="clip scr" src="assets/shots/22_journal_form.png" alt="" data-start="129.8667" data-duration="5.7333" data-track-index="3" style="z-index:22" />
+        <img id="scr-22" class="clip scr" src="assets/shots/23_journal.png" alt="" data-start="135.1" data-duration="4.6333" data-track-index="2" style="z-index:23" />
+        <img id="scr-23" class="clip scr" src="assets/shots/24_stats.png" alt="" data-start="139.2333" data-duration="5.4667" data-track-index="3" style="z-index:24" />
+        <img id="scr-24" class="clip scr" src="assets/shots/25_profile.png" alt="" data-start="144.2" data-duration="7.1333" data-track-index="2" style="z-index:25" />
+        <img id="scr-25" class="clip scr" src="assets/shots/26_badges.png" alt="" data-start="150.8333" data-duration="4.9" data-track-index="3" style="z-index:26" />
+        <img id="scr-26" class="clip scr" src="assets/shots/07_home.png" alt="" data-start="155.2333" data-duration="5.2667" data-track-index="2" style="z-index:27" />
+        <div id="stage-island"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // Baseline: every screen but the first waits off to the right.
+    tl.set(".scr", { xPercent: 100 }, 0);
+    tl.set("#scr-00", { xPercent: 0 }, 0);
+      tl.to("#scr-01", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 12.0333);
+      tl.to("#scr-00", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 12.0333);
+      tl.to("#scr-02", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 18.3333);
+      tl.to("#scr-01", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 18.3333);
+      tl.to("#scr-03", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 26.3667);
+      tl.to("#scr-02", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 26.3667);
+      tl.to("#scr-04", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 32.1667);
+      tl.to("#scr-03", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 32.1667);
+      tl.to("#scr-05", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 36.9333);
+      tl.to("#scr-04", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 36.9333);
+      tl.to("#scr-06", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 41.9333);
+      tl.to("#scr-05", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 41.9333);
+      tl.to("#scr-07", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 49.1667);
+      tl.to("#scr-06", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 49.1667);
+      tl.to("#scr-08", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 54.9667);
+      tl.to("#scr-07", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 54.9667);
+      tl.to("#scr-09", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 61.3333);
+      tl.to("#scr-08", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 61.3333);
+      tl.to("#scr-10", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 66.0);
+      tl.to("#scr-09", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 66.0);
+      tl.to("#scr-11", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 70.3);
+      tl.to("#scr-10", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 70.3);
+      tl.to("#scr-12", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 75.1333);
+      tl.to("#scr-11", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 75.1333);
+      tl.to("#scr-13", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 81.7);
+      tl.to("#scr-12", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 81.7);
+      tl.to("#scr-14", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 85.8333);
+      tl.to("#scr-13", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 85.8333);
+      tl.to("#scr-15", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 89.4333);
+      tl.to("#scr-14", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 89.4333);
+      tl.to("#scr-16", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 94.2);
+      tl.to("#scr-15", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 94.2);
+      tl.to("#scr-17", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 101.6667);
+      tl.to("#scr-16", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 101.6667);
+      tl.to("#scr-18", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 108.3667);
+      tl.to("#scr-17", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 108.3667);
+      tl.to("#scr-19", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 116.7);
+      tl.to("#scr-18", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 116.7);
+      tl.to("#scr-20", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 123.9667);
+      tl.to("#scr-19", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 123.9667);
+      tl.to("#scr-21", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 129.8667);
+      tl.to("#scr-20", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 129.8667);
+      tl.to("#scr-22", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 135.1);
+      tl.to("#scr-21", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 135.1);
+      tl.to("#scr-23", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 139.2333);
+      tl.to("#scr-22", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 139.2333);
+      tl.to("#scr-24", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 144.2);
+      tl.to("#scr-23", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 144.2);
+      tl.to("#scr-25", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 150.8333);
+      tl.to("#scr-24", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 150.8333);
+      tl.to("#scr-26", { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 155.2333);
+      tl.to("#scr-25", { xPercent: -30, duration: 0.5, ease: "power3.inOut" }, 155.2333);
+    window.__timelines["stage"] = tl;
+  </script>
+</template>

@@ -1,0 +1,6 @@
+renders/
+.hyperframes/
+.thumbnails/
+.waveform-cache/
+node_modules/
+*.mp4
