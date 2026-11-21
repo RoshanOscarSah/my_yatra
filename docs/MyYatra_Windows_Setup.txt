@@ -58,14 +58,27 @@ STEP 3 - Start the database emulators (every time)
 --------------------------------------------------
 Do NOT run tool/emulators.sh - that file is for Mac/Linux only.
 
-Open PowerShell in the my_yatra folder and run:
+First get the latest version of the project (it has a fix for Windows):
+
+    git pull
+
+Open PowerShell in the my_yatra folder.
+
+The VERY FIRST time, run this (there is no saved data yet):
+
+    firebase emulators:start --project demo-myyatra --export-on-exit emulator-data
+
+Every time AFTER that, run this (it loads your saved data):
 
     firebase emulators:start --project demo-myyatra --import emulator-data --export-on-exit emulator-data
 
-Leave this window open. When it says "All emulators ready", it is working.
-The emulator dashboard is at http://localhost:4000
-(The first time there is no saved data yet, which is fine. Stop it with
-Ctrl+C so the data is saved for next time.)
+Leave this window open. Wait until it says "All emulators ready" - only
+then start the app. The emulator dashboard is at http://localhost:4000
+Stop the emulators with Ctrl+C (once) so the data is saved for next time.
+
+Check the Auth line in the table it prints. It must say 0.0.0.0:9099.
+If it says 127.0.0.1:9099 or localhost:9099, you do not have the latest
+version: run "git pull" again.
 
 If Windows Firewall pops up asking about Java or Node, click "Allow".
 
@@ -100,9 +113,21 @@ Common problems
 "Could not start Firestore emulator ... Java"
     -> Java 21 is missing. Do Step 2, item 4, then reopen PowerShell.
 
-The app opens but cannot log in / says it cannot connect
-    -> Make sure the emulator window from Step 3 is still open and says
-       "All emulators ready".
+"An internal error has occurred. Failed to connect to /10.0.2.2:9099"
+(or the app cannot log in / cannot connect)
+    The app cannot reach the emulators on your PC. Check, in this order:
+    1. The emulator window from Step 3 is still open and says
+       "All emulators ready". If it showed an error and closed, read the
+       error (often Java missing, or the --import folder not existing yet -
+       use the "very first time" command).
+    2. The Auth line says 0.0.0.0:9099 (see Step 3). If not, "git pull".
+    3. Windows Firewall: allow Java and Node.js on Private networks
+       (Windows Security > Firewall > Allow an app through firewall).
+    4. You are using the Android EMULATOR, not a real phone. For a real
+       phone on the same Wi-Fi, find your PC's IP (run "ipconfig", look for
+       IPv4 Address, e.g. 192.168.1.20) and run:
+           flutter run --dart-define=EMULATOR_HOST=192.168.1.20
+    5. Fully close the app on the emulator and run "flutter run" again.
 
 Path errors or very long build failures
     -> Put the project in a short path with no spaces, for example
